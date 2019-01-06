@@ -1,4 +1,4 @@
-<cfif (not structKeyExists(session,'stLoggedInUser')) or (not isuserloggedin())>
+<cfif NOT isuserloggedin()>
 	<cfset sign = "signUp">
 	<cfset signPage = "signUpForm.cfm">
 <cfelse>

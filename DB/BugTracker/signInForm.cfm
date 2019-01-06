@@ -1,7 +1,7 @@
 <cf_template pagename="Authentication page">		
 	<!---If form is submitted--->
 	<cfif structKeyExists(#form#, 'submitSignin')>
-		<cfset application.isUserLoggedIn = application.authController.signIn(form.field_userEmail, 
+		<cfset application.isUserLoggedIn = application.authServe.signIn(form.field_userEmail, 
 		                                                                 form.field_userPassword)>
 	</cfif>	
 	<div class="container col-5">

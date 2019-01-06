@@ -1,16 +1,13 @@
-<cf_template pagename="Authentication page">		
-	<!---If form is submitted--->
-	<cfif structKeyExists(#form#, 'submitSignin')>
-		<cfset application.isUserLoggedIn = application.authController.signIn(form.field_userEmail, 
-		                                                                 form.field_userPassword)>
+<cf_template pagename="Authentication page">
+	<cfif structKeyExists(#form#, 'submitSignup')>
+		<cfset application.isUserLoggedIn = application.authServe.signUp(form.field_userEmail, form.field_userName, form.field_userSoname, form.field_userPassword)>
 	</cfif>	
 	<div class="container col-5">
-		<cfform class="form-signin" id="formSignin" preservedata="true">
+		<cfform class="form-signin" id="formSignup" preservedata="true">
 			<fieldset>
 			<legend>
-				Sign in
+				Sign up
 			</legend>
-			<!---Output the error messages--->
 			<cfif structKeyExists(variables, 'aErrorMessages') AND NOT ArrayIsEmpty(aErrorMessages)>
 				<cfoutput>
 					<cfloop array="#aErrorMessages#" item="message">
@@ -44,12 +41,29 @@
 					<label for="field_userPassword">
 						Password
 					</label>
-				</div>				
+				</div>
+				<div class="form-label-group">
+					<cfinput class="form-control" placeholder="Name" type="text" name="field_userName"
+					         id="field_userName" required="true" validateat="onSubmit" 
+					         message="Please, provide a name"/>
+					<label for="field_userPassword">
+						Your name
+					</label>
+				</div>
+				<div class="form-label-group">
+					<cfinput class="form-control" placeholder="Soname" type="text" name="field_userSoname"
+					         id="field_userSoname" required="true" validateat="onSubmit" 
+					         message="Please, provide a name"/>
+					<label for="field_userPassword">
+						Your soname
+					</label>
+				</div>
+				
 				<div class="d-flex justify-content-between">
-					<cfinput class="btn btn-lg btn-primary btn-block" type="submit" name="submitSignin" 
-					         id="submitSignin" value="SignIn"/>
+					<cfinput class="btn btn-lg btn-primary btn-block" type="submit" name="submitSignup" 
+					         id="submitSignup" value="SignUp"/>
 				</div>
 			</cfif>
 		</cfform>
-	</div>
+	</div>	
 </cf_template>

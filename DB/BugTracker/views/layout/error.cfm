@@ -1,0 +1,1 @@
+<h5>Sorry, but only authenticated users have permission for this content</h5>

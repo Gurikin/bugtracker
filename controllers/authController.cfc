@@ -1,9 +1,5 @@
 component output="false"
 {		
-	public struct function myfoo() output="false"{
-		session.test = "Im testing this singin already 2 hours";
-		return session;
-	}
 	public array function validateUser(required string email, required string password) output="false"
 	{
 		aErrorMessages = ArrayNew(1);
@@ -16,7 +12,7 @@ component output="false"
 		return aErrorMessages;
 	}
 	
-	public array function signUp(required string email, required string fname, required string lname, 
+	public boolean function signUp(required string email, required string fname, required string lname, 
 	                             required string password) output="false"
 	{
 		queryService = new query();
@@ -26,9 +22,9 @@ component output="false"
 		queryService.addParam(name="lname_sql_param",value=arguments.lname,cfsqltype="cf_sql_varchar");
 		queryService.addParam(name="password_sql_param",value=arguments.password,cfsqltype="cf_sql_varchar");
 		result = queryService.execute(sql="SELECT count(*) as cnt FROM user WHERE email = :email_sql_param");
-		if (result.getResult() == 0) {
+		if (result.getResult().cnt == 0) {
 			signUpResult = queryService.execute(sql="INSERT INTO user (email, fName, lname, password) values (:email_sql_param, :fname_sql_param, :lname_sql_param, :password_sql_param)");
-			return signIn (arguments.email, arguments.password);
+			return this.signIn (arguments.email, arguments.password);
 		} else {
 			aErrorMessages = ArrayNew(1);
 			arrayAppend(aErrorMessages,'Sorry, we already find user with this email. Please, try again.');
@@ -36,7 +32,7 @@ component output="false"
 		}				
 	}
 	
-	public boolean function signIn(required string email, required string password) output="false"
+	public void function signIn(required string email, required string password) output="false"
 	{
 		application.isUserLoggedIn = false;
 		queryService = new query();
@@ -46,17 +42,19 @@ component output="false"
 		result = queryService.execute(sql="SELECT email, fName, lname, password FROM user WHERE email = :email_sql_param and password = :password_sql_param");
 		signInResult = result.getResult();
 		if (signInResult.recordCount EQ 1) {
-			cflogin() {
+        	cflogin() {
 				 cfloginuser(name=signInResult.email, password=signInResult.password, roles="user");
 			 }
 			 session.stLoggedInUser = {'userFirstName' = signInResult.fName, 'userLastName' = signInResult.lname, 'userID' = signInResult.email};
 			 application.isUserLoggedIn = true;
+			 location("bugtracker.cfm");
 		}
-		return application.isUserLoggedIn;
+//		return application.isUserLoggedIn;
 	}
 	
 	public void function signOut() output="false"
 	{
 		structdelete(session,'stLoggedInUser');
+		application.isUserLoggedIn = false;
 	}	
 }
