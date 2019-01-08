@@ -35,6 +35,7 @@ component output="false"
 	public void function signIn(required string email, required string password) output="false"
 	{
 		application.isUserLoggedIn = false;
+		structDelete(session,'stLoggedInUser');
 		queryService = new query();
 		queryService.setName("signInResult");
 		queryService.addParam(name="email_sql_param",value=arguments.email,cfsqltype="cf_sql_varchar");		
@@ -42,15 +43,14 @@ component output="false"
 		result = queryService.execute(sql="SELECT email, fName, lname, password FROM user WHERE email = :email_sql_param and password = :password_sql_param");
 		signInResult = result.getResult();
 		if (signInResult.recordCount EQ 1) {
-        	cflogin() {
-				 cfloginuser(name=signInResult.email, password=signInResult.password, roles="user");
-			 }
-			 session.stLoggedInUser = {'userFirstName' = signInResult.fName, 'userLastName' = signInResult.lname, 'userID' = signInResult.email};
-			 application.isUserLoggedIn = true;
-			 location("bugtracker.cfm");
+			cflogin() {
+				cfloginuser(name=signInResult.email, password=signInResult.password, roles="user");
+			}
+		 	session.stLoggedInUser = {'userFirstName' = signInResult.fName, 'userLastName' = signInResult.lname, 'userID' = signInResult.email};
+		 	application.isUserLoggedIn = true;
+		 	location("bugtracker.cfm");			
 		}
-//		return application.isUserLoggedIn;
-	}
+	}	
 	
 	public void function signOut() output="false"
 	{

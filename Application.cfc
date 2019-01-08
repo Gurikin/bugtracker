@@ -4,14 +4,14 @@ component output="false" {
 	this.datasource = 'bug_tracker_test';	
 	this.customTagPaths = '\bugtracker\views\layout';
 	this.sessionManagement = true;
+	this.cookieManagement = true;
 	this.sessionTimeout = createTimespan(0, 2, 0, 0);
 
-//	OnApplicationStart() method
-	boolean function onApplicationStart() output="false" {
-		//instantiante DataMgr. Treat as a singleton
-//		Application.DataMgr = CreateObject("component", "bugtracker.components.dataManager.DataMgr").init(this.datasource,"MYSQL","root", "root");		
+	//	OnApplicationStart() method
+	boolean function onApplicationStart() output="false" {		
 		application.authController = createObject("component",'bugtracker.controllers.authController');					
 		application.bugController = createObject("component",'bugtracker.controllers.bugController');
+		application.bugHistoryController = createObject("component",'bugtracker.controllers.bugHistoryController');
 		application.userController = createObject("component",'bugtracker.controllers.userController');
 		application.utils = createObject("component",'bugtracker.controllers.utils');
 		return true;
@@ -23,9 +23,8 @@ component output="false" {
 		if (isDefined('url.restartApp')) {
 			this.onApplicationStart();
 		}
-
-		writeOutput(isUserLoggedIn());
-		if (not isUserLoggedIn()) {
+		
+		if (not isUserLoggedIn() and (not structKeyExists(session, 'stLoggedInUser'))) {
 			if (not (listFind(CGI.SCRIPT_NAME,'signInForm.cfm', '/'))) {
 				if (not (listFind(CGI.SCRIPT_NAME,'signUpForm.cfm', '/'))) {
 					location("/BugTracker/signInForm.cfm");					

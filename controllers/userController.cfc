@@ -15,11 +15,13 @@ component  output="false"
 	{
 		queryService = new query();
 		queryService.addParam(name="email",value=arguments.email);	
-		getBugQuery = queryService.execute(sql="SELECT user.email, user.fname, user.lname, count(bug.bug_id) AS bug_count
-		FROM user INNER JOIN users_bugs ON users_bugs.user_email = user.email
-		INNER JOIN bug ON users_bugs.bug_id = bug.bug_id WHERE user.email = :email");		
+		getBugQuery = queryService.execute(sql="SELECT user.email, user.fname, user.lname FROM user WHERE user.email = :email");		
 		getBugResult = getBugQuery.getResult();
 		return getBugResult;
+		/*;*/
+    /*SELECT user.email, user.fname, user.lname, count(bug_history.bug_id) AS bug_count
+		FROM user INNER JOIN bug_history ON bug_history.user_email = user.email 
+		INNER JOIN bug ON bug_history.bug_id = bug.bug_id WHERE status = 'opened'*/
 	}
 	
 	public boolean function updateUserProfile(string email, string fname, string lname, string password)

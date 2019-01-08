@@ -30,8 +30,11 @@ CREATE TABLE `bug` (
   `status` enum('new','opened','solved','closed') COLLATE utf8mb4_unicode_ci NOT NULL,
   `urgency` enum('immediately','urgently','unrushed','completly unrushed') COLLATE utf8mb4_unicode_ci NOT NULL,
   `criticality` enum('crash','critical','dont critical','change request') COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`bug_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `usr_email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`bug_id`),
+  KEY `usr_email_idx` (`usr_email`),
+  CONSTRAINT `usr_email` FOREIGN KEY (`usr_email`) REFERENCES `user` (`email`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +43,7 @@ CREATE TABLE `bug` (
 
 LOCK TABLES `bug` WRITE;
 /*!40000 ALTER TABLE `bug` DISABLE KEYS */;
-INSERT INTO `bug` VALUES (1,'2018-12-27','mistake # 1','','new','urgently','critical'),(2,'2018-12-24','mistake # 2','','opened','urgently','dont critical'),(3,'2018-11-22','mistake # 3','','solved','unrushed','change request'),(4,'2018-12-28','mistake # 4',NULL,'new','immediately','crash'),(5,'2018-12-29','mistake # 5',NULL,'closed','immediately','crash');
+INSERT INTO `bug` VALUES (27,'2019-01-07','Bug # 1','Full description of bug # 1','opened','immediately','crash','igor@gmail.com'),(28,'2019-01-06','Bug # 2','Full description of bug # 2','opened','urgently','critical','igor@gmail.com'),(29,'2019-01-08','Bug # 3','Full description of bug # 3','opened','unrushed','dont critical','igor@gmail.com'),(30,'2019-01-09','Bug # 4','Full description of bug # 4','opened','completly unrushed','change request','igor@gmail.com'),(31,'2019-01-09','Bug # 5','Full description of bug # 5','opened','urgently','critical','jr@gmail.com'),(32,'2019-01-09','Bug # 6','Full description of bug # 6','new','urgently','dont critical','jr@gmail.com');
 /*!40000 ALTER TABLE `bug` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -52,14 +55,18 @@ DROP TABLE IF EXISTS `bug_history`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bug_history` (
-  `idbug_history` int(11) NOT NULL AUTO_INCREMENT,
-  `action_date` date NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `bug_id` int(11) NOT NULL,
+  `action` enum('new','opened','solved','closed') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `action_date` datetime NOT NULL,
   `action_comment` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`idbug_history`),
+  PRIMARY KEY (`id`),
   KEY `user_email` (`user_email`),
-  CONSTRAINT `user_email` FOREIGN KEY (`user_email`) REFERENCES `user` (`email`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `bug_id_idx` (`bug_id`),
+  CONSTRAINT `bug_id` FOREIGN KEY (`bug_id`) REFERENCES `bug` (`bug_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `user_email` FOREIGN KEY (`user_email`) REFERENCES `user` (`email`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,6 +75,7 @@ CREATE TABLE `bug_history` (
 
 LOCK TABLES `bug_history` WRITE;
 /*!40000 ALTER TABLE `bug_history` DISABLE KEYS */;
+INSERT INTO `bug_history` VALUES (16,27,'new','2019-01-08 23:21:34','Add bug to bugtracker list','igor@gmail.com'),(17,28,'new','2019-01-08 23:30:26','Add bug to bugtracker list','igor@gmail.com'),(18,29,'new','2019-01-08 23:30:42','Add bug to bugtracker list','igor@gmail.com'),(19,27,'opened','2019-01-08 23:31:14','Comment for open bug # 1','igor@gmail.com'),(20,28,'opened','2019-01-08 23:33:47','Comment for open bug # 2','igor@gmail.com'),(21,27,'solved','2019-01-08 23:46:15','Comment for solve bug # 1','igor@gmail.com'),(22,27,'opened','2019-01-08 23:52:46','Comment for reopen the bug # 1','igor@gmail.com'),(23,30,'new','2019-01-09 00:16:54','Add bug to bugtracker list','igor@gmail.com'),(24,30,'opened','2019-01-09 00:17:09','Comment for open bug # 4','igor@gmail.com'),(25,29,'opened','2019-01-09 00:17:50','Comment for open bug # 3 from JR','jr@gmail.com'),(26,31,'new','2019-01-09 00:23:40','Add bug to bugtracker list','jr@gmail.com'),(27,31,'opened','2019-01-09 00:29:32','Comment for open bug # 5 from JR','jr@gmail.com'),(28,32,'new','2019-01-09 00:37:13','Add bug to bugtracker list','jr@gmail.com');
 /*!40000 ALTER TABLE `bug_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,37 +102,8 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('b@gmail.com','Bob','Anderson','123'),('igor@gmail.com','Igor','Bug','123'),('jr@gmail.com','Joan','Rowling','123'),('vano@gmail.com','Ivan','Ivanov','123');
+INSERT INTO `user` VALUES ('b@gmail.com','Bob','Anderson','123'),('igor@gmail.com','Igor','Baggins','123'),('jr@gmail.com','Joan','Rowling','123'),('vano@gmail.com','Ivan','Ivanov','123');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `users_bugs`
---
-
-DROP TABLE IF EXISTS `users_bugs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users_bugs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `bug_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_email` (`user_email`),
-  KEY `bug_id` (`bug_id`),
-  CONSTRAINT `users_bugs_ibfk_1` FOREIGN KEY (`user_email`) REFERENCES `user` (`email`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `users_bugs_ibfk_2` FOREIGN KEY (`bug_id`) REFERENCES `bug` (`bug_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users_bugs`
---
-
-LOCK TABLES `users_bugs` WRITE;
-/*!40000 ALTER TABLE `users_bugs` DISABLE KEYS */;
-INSERT INTO `users_bugs` VALUES (1,'igor@gmail.com',1),(2,'igor@gmail.com',2),(3,'jr@gmail.com',3),(4,'jr@gmail.com',4),(5,'b@gmail.com',5);
-/*!40000 ALTER TABLE `users_bugs` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -136,4 +115,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-05 10:30:10
+-- Dump completed on 2019-01-09  0:44:28

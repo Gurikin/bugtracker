@@ -23,7 +23,7 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/BugTracker/signUp.cfm">
+				<a class="nav-link" href="/BugTracker/signUpForm.cfm">
 					<span data-feather="userAdd">
 						Sign up to our team
 					</span>					
