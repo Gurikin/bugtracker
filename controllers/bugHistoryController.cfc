@@ -1,5 +1,6 @@
 component  output="false"
 {
+	// add history bug row 
 	public boolean function addBug(required numeric bug_id)
 	 output="true"
 	{
@@ -28,6 +29,7 @@ component  output="false"
 		}
 	}
 	
+	// add row to history table on change status of bug
 	public boolean function changeStatus(required numeric bug_id, required string newStatus, required string comment)
 	 output="false"
 	{
@@ -55,6 +57,7 @@ component  output="false"
 		}			
 	}
 	
+	// get all history about one specific bug
 	public query function getBugHistory(required numeric bug_id) output='false'
 	{
 		queryService = new query();		

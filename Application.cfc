@@ -25,6 +25,8 @@ component output="false" {
 			this.onApplicationStart();
 		}
 		
+		
+		//redirect if logout
 		if (not isUserLoggedIn() and (not structKeyExists(session, 'stLoggedInUser'))) {
 			if (not (listFind(CGI.SCRIPT_NAME,'signInForm.cfm', '/'))) {
 				if (not (listFind(CGI.SCRIPT_NAME,'signUpForm.cfm', '/'))) {
@@ -32,10 +34,11 @@ component output="false" {
 				}				
 			} 
 		}
-				
+		
+		// do if get signout atribute		
 		if (isDefined('url.signOut')) {
 			application.authController.signOut();
-		}	
+		}
 		
 		return true;	
 	}

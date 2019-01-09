@@ -1,6 +1,8 @@
 <cf_template pagename="User details page">
+	<!--- get query results --->
 	<cfset bugDetails = application.bugController.getBugByID(url.id)>
 	<cfset bugHistory = application.bugHistoryController.getBugHistory(url.id)>
+	<!--- submit form handle --->
 	<cfif structKeyExists(#form#, 'submitChangeStatus')>
 		<cfif application.bugHistoryController.changeStatus(bugDetails.bug_id, form.submitChangeStatus, 
 		                                                    form.field_comment) and application.bugController.changeStatus(bugDetails.bug_id, 
@@ -8,6 +10,7 @@
 			<cflocation url="bugDetails.cfm?id=#bugDetails.bug_id#">
 		</cfif>
 	</cfif>
+	<!--- if can't find the bug --->
 	<div class="container d-block col-lg-5 col-md-6 col-sm-12 col-xs-12 bt-container-list">
 		<cfif (not structKeyExists(url, 'id')) or (bugDetails.RecordCount == 0)>
 			<p class="text-danger">
@@ -15,6 +18,7 @@
 			</p>
 			<cfabort>
 		</cfif>
+		<!--- bug details list --->
 		<cfoutput query="bugDetails">
 			<h2>
 				Bug detailed information
@@ -74,6 +78,7 @@
 	</div>
 	<hr>
 	
+	<!--- bug history list --->
 	<div class="container col-10 d-block justify-content-between bt-container-table">
 	<h2 class="text-center">
 		<cfoutput>

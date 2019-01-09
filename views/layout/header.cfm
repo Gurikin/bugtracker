@@ -1,8 +1,9 @@
 <cfscript>
+	// Get text for signOut/signUp button
 	if(not isUserLoggedIn())
 	{
-		sign = 'signUp';
-		signPage = 'signUpForm.cfm';
+		sign = 'signIn';
+		signPage = 'signInForm.cfm';
 	}
 	else
 	{

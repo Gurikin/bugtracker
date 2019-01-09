@@ -38,6 +38,7 @@
     </div>
     </div>
 
+	<!---include js assets here --->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="/BugTracker/assets/js/bootstrap.bundle.min.js"></script>
     </body>	

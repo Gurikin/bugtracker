@@ -1,7 +1,10 @@
-<cf_template pagename="Users list">	
+<cf_template pagename="Users list">
+	<!--- set default sort variables --->
 	<cfset url.orderBy = (structKeyExists(url,"orderBy") ? url.orderBy : "fname")>
 	<cfset url.sortOrder = (structKeyExists(url,"sortOrder") ? url.sortOrder : "ASC")>
-	<cfset userList = application.userController.getAllUsers("", url.orderBy, url.sortOrder)>	
+	<!--- get the query results with all users --->
+	<cfset userList = application.userController.getAllUsers("", url.orderBy, url.sortOrder)>
+	<!--- table with users info --->	
 	<div class="container">
 		<table class="col-12 table table-hover table-dark border">
 			<thead class="text-center">

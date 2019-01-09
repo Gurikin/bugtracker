@@ -1,7 +1,10 @@
 <cf_template pagename="Bug tracker">
+	<!--- set default sort variables --->
 	<cfset url.orderBy = (structKeyExists(url,"orderBy") ? url.orderBy : "find_date")>
 	<cfset url.sortOrder = (structKeyExists(url,"sortOrder") ? url.sortOrder : "ASC")>
-	<cfset bugList = application.bugController.getOpenedBugsByUserID(url.email)>	
+	<!--- get query result with list of all opened bugs binded with specific user --->
+	<cfset bugList = application.bugController.getOpenedBugsByUserID(url.email)>
+	<!--- bugs list --->	
 	<div class="container">
 		<table class="col-12 table table-hover table-dark border">
 			<thead class="text-center">

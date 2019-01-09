@@ -1,5 +1,6 @@
 component output="false"
-{		
+{
+	//validate form fields		
 	public array function validateUser(required string email, required string password) output="false"
 	{
 		aErrorMessages = ArrayNew(1);
@@ -12,6 +13,7 @@ component output="false"
 		return aErrorMessages;
 	}
 	
+	// add user to the db 
 	public boolean function signUp(required string email, required string fname, required string lname, 
 	                             required string password) output="false"
 	{
@@ -32,6 +34,7 @@ component output="false"
 		}				
 	}
 	
+	// try find user in DB
 	public void function signIn(required string email, required string password) output="false"
 	{
 		application.isUserLoggedIn = false;
@@ -52,6 +55,7 @@ component output="false"
 		}
 	}	
 	
+	// user sign out handle
 	public void function signOut() output="false"
 	{
 		structdelete(session,'stLoggedInUser');

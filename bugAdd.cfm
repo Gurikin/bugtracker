@@ -1,6 +1,9 @@
 <cf_template pagename="Bug add/update page">
+	<!--- get bug enums fields --->
 	<cfset bugColumns = application.bugController.getEnumStructs()>
+	<!--- get right title and submit texts --->
 	<cfif (not structKeyExists(url, 'id'))>
+		<!--- submit form handle --->
 		<cfif structKeyExists(#form#, 'submitAddBug')>
 			<cfif application.bugController.addBug(form)>
 				<cflocation url="bugTracker.cfm">
@@ -22,6 +25,8 @@
 		<cfset submitText = 'submitUpdateBug'>
 		<cfset legend = 'Details of bug ## #bugDetails.bug_id#'>		
 	</cfif>
+	
+	<!--- add bug form --->
 	<cfoutput>
 		<div class="container col-5">
 			<cfform id="formBug" preservedata="true">

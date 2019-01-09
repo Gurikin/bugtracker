@@ -1,13 +1,16 @@
 <cf_template pagename="User details page">
+	<!--- get the query results with user and his bugs details--->
 	<cfset userDetails = application.userController.getUserByID(url.email)>
 	<cfset userBugs = application.bugController.getOpenedBugsByUserID(url.email)>
+	<!--- message if can't find the user --->
+	<cfif (not structKeyExists(url, 'email')) or (userDetails.RecordCount == 0)>
+		<p class="text-danger">
+			Oops! We can't find the details about the user with this email. Please, try again.
+		</p>
+		<cfabort>
+	</cfif>
+	<!--- list with user details --->
 	<div class="container col-5">
-		<cfif (not structKeyExists(url, 'email')) or (userDetails.RecordCount == 0)>
-			<p class="text-danger">
-				Oops! We can't find the details about the user with this email. Please, try again.
-			</p>
-			<cfabort>
-		</cfif>		
 		<cfoutput>
 			<h2>
 				Details about 

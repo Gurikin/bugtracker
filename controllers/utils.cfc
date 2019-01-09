@@ -1,6 +1,6 @@
 component
 {
-	
+	// get the bootstrap color classes for the bug status, urgency and criticality fields
 	public void function getBugTrClass(required string status_urgency_critical)
 	{
 		
@@ -50,6 +50,7 @@ component
 		}		
 	}
 	
+	// get the right text for the update status button
 	public array function changeStatusButton(string currentStatus) {
 		result = [];
 		switch (arguments.currentStatus) {

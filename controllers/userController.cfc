@@ -1,5 +1,6 @@
 component  output="false"
 {
+	//get all users
 	public query function getAllUsers(string filter='', string orderBy, string sortOrder)
 	 output="false"
 	{
@@ -10,6 +11,7 @@ component  output="false"
 		return getAllUsersResults;
 	}
 	
+	//get specific user by email field
 	public query function getUserByID(string email)
 	 output="false"
 	{
@@ -17,13 +19,11 @@ component  output="false"
 		queryService.addParam(name="email",value=arguments.email);	
 		getBugQuery = queryService.execute(sql="SELECT user.email, user.fname, user.lname FROM user WHERE user.email = :email");		
 		getBugResult = getBugQuery.getResult();
-		return getBugResult;
-		/*;*/
-    /*SELECT user.email, user.fname, user.lname, count(bug_history.bug_id) AS bug_count
-		FROM user INNER JOIN bug_history ON bug_history.user_email = user.email 
-		INNER JOIN bug ON bug_history.bug_id = bug.bug_id WHERE status = 'opened'*/
+		return getBugResult;		
 	}
 	
+	//update user profile info
+	//simple password change
 	public boolean function updateUserProfile(string email, string fname, string lname, string password)
 	 output="true"
 	{
@@ -33,7 +33,7 @@ component  output="false"
 		queryService.addParam(name="email",value=arguments.email);
 		queryService.addParam(name="fname",value=arguments.fname);
 		queryService.addParam(name="lname",value=arguments.lname);
-		queryService.addParam(name="password",value=arguments.password);
+		queryService.addParam(name="password",value=encrypt(arguments.password, application.sugar, "AES", "Base64"));
 		queryService.addParam(name="emailOld",value=session.stLoggedInUser.userID);						
 		try {
 			updateUserResult = queryService.execute().getResult();		

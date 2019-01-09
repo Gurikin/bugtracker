@@ -1,5 +1,6 @@
 component  output="false"
 {
+	//add bug to the DB
 	public boolean function addBug(required struct form)
 	 output="true"
 	{
@@ -18,7 +19,7 @@ component  output="false"
 				queryService.addParam(name = 'urgency', value=arguments.form.urgency);
 				queryService.addParam(name = 'criticality', value=arguments.form.criticality);			
 				queryService.addParam(name = 'usr_email', value=session.stLoggedInUser.userID);
-				insQuery = queryService.execute(); //.getResult()				 
+				insQuery = queryService.execute();
 				bug_id = insQuery.getPrefix().generatedkey;
 				//===============================================================================================================
 				//Insert Into bug_history table==================================================================================
@@ -35,6 +36,7 @@ component  output="false"
 		}
 	}
 
+	// update bug info
 	public boolean function updateBug(required struct form, bug_id)
 	 output="false"
 	{
@@ -59,6 +61,7 @@ component  output="false"
 		}			
 	}
 	
+	// change the status of bug
 	public boolean function changeStatus(required numeric bug_id, required string newStatus) {
 		transaction {
 			try {
@@ -80,6 +83,7 @@ component  output="false"
 		}
 	}	
 
+	// get list of all bugs with filter by status field
 	public query function getAllBugs(string filter='', string orderBy, string sortOrder)
 	 output="false"
 	{		
@@ -98,6 +102,7 @@ component  output="false"
 		}		
 	}
 	
+	// get one specific bug by bug_id field
 	public query function getBugByID(required numeric id)
 	 output="false"
 	 {
@@ -113,6 +118,7 @@ component  output="false"
 		}		
 	}
 	
+	// get all opened bugs for specific user
 	public query function getOpenedBugsByUserID(required string email, string orderBy = 'find_date', string sortOrder = 'DESC')
 	 output="false"
 	 {
@@ -133,6 +139,7 @@ component  output="false"
 		}		
 	}
 	
+	// get available values for enums fields of bug table
 	public array function getEnumStructs() output="false" {
 		enumFields = ['status', 'urgency', 'criticality'];		
 		queryService = new query();

@@ -1,23 +1,30 @@
 <cf_template pagename="User profile update page">
+	<!--- get and handle the user details info --->
+	<cfset userDetails = application.userController.getUserByID(url.email)>
+	<cfif userDetails.RecordCount EQ 0>
+		<p class="text-danger">
+			Sorry, we can't find user with this email. Please, try again.
+		</p>
+	</cfif>
+	<!--- submit form handle --->
 	<cfif structKeyExists(#form#, 'submitUpdateProfile')>
-		<cfif application.userController.updateUserProfile(form.field_userEmail, form.field_userName, form.field_userSoname, form.field_userPassword)>
-			<cflocation url="userProfile.cfm?email=#session.stLoggedInUser.userID#" >
+		<cfif application.userController.updateUserProfile(form.field_userEmail, form.field_userName, 
+		                                                   form.field_userSoname,form.field_userPassword)>
+			<cflocation url="userProfile.cfm?email=#session.stLoggedInUser.userID#">
+		<cfelse>
+			<p class="text-danger">
+				Sorry, we have the exceptional situation. Please, try again.
+			</p>
 		</cfif>
 	</cfif>
-	<cfset userDetails = application.userController.getUserByID(url.email)>
+	<!--- user profile update form here --->
 	<cfoutput>
-	<div class="container col-5">
-		<cfform id="formUserDetails" preservedata="true">
-			<fieldset>
-			<cfif (not structKeyExists(url, 'email')) or (userDetails.RecordCount == 0)>
-				<p class="text-danger">
-					Oops! We can't find the details about the user with this email. Please, try again.
-				</p>
-				<cfabort>
-			</cfif>			
-			<legend>
-				Your profile details
-			</legend>			
+		<div class="container col-5">
+			<cfform id="formUserDetails" preservedata="true">
+				<fieldset>
+				<legend>
+					Your profile details
+				</legend>
 				<div class="form-label-group">
 					<cfinput class="form-control" placeholder="Email" type="email" name="field_userEmail"
 					         id="field_userEmail" required="true" validate="email" validateat="onSubmit"
@@ -51,10 +58,10 @@
 					</label>
 				</div>
 				<div class="d-flex justify-content-between">
-					<cfinput class="btn btn-lg btn-primary btn-block" type="submit" name="submitUpdateProfile"
-							id="submitUpdateProfile" value="Update profile"/>
-				</div>			
-		</cfform>
-	</div>		
-	</cfoutput>	
+					<cfinput class="btn btn-lg btn-primary btn-block" type="submit" name="submitUpdateProfile" 
+					         id="submitUpdateProfile" value="Update profile"/>
+				</div>
+			</cfform>
+		</div>
+	</cfoutput>
 </cf_template>
