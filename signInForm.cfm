@@ -1,4 +1,11 @@
-<cf_template pagename="Authentication page">		
+<cf_template pagename="Authentication page">
+	<!---<cfscript>
+		myInfo={};	    
+	    myInfo.secret = "123";
+	    myInfo.encrypted=encrypt(myInfo.secret, 'BLHL4WObGzd8+pVAPgw2kg==', "AES", "Base64");
+	    myInfo.decrypted=decrypt(myInfo.encrypted, 'BLHL4WObGzd8+pVAPgw2kg==', "AES", "Base64");
+	    writeDump(myInfo);
+	</cfscript>	--->	
 	<!---If form is submitted--->
 	<cfif structKeyExists(#form#, 'submitSignin')>
 		<cfset application.isUserLoggedIn = application.authController.signIn(form.field_userEmail,form.field_userPassword)>

@@ -8,7 +8,7 @@
 			<cflocation url="bugDetails.cfm?id=#bugDetails.bug_id#">
 		</cfif>
 	</cfif>
-	<div class="container col-5">
+	<div class="container d-block col-lg-5 col-md-6 col-sm-12 col-xs-12 bt-container-list">
 		<cfif (not structKeyExists(url, 'id')) or (bugDetails.RecordCount == 0)>
 			<p class="text-danger">
 				Oops! We can't find the details about the bug with this id. Please, try again.
@@ -20,7 +20,7 @@
 				Bug detailed information
 			</h2>
 			<div class="d-flex justify-content-end">
-				<a class="btn btn-sm btn-primary btn-block col-2" href="bugAdd.cfm?id=#bugDetails.bug_id#">
+				<a class="btn btn-sm btn-primary btn-block col-lg-5 col-md-6 col-sm-8 col-xs-7 mb-2" href="bugAdd.cfm?id=#bugDetails.bug_id#">
 					Update bug
 				</a>
 			</div>
@@ -74,7 +74,7 @@
 	</div>
 	<hr>
 	
-	<div class="container col-10 d-block justify-content-between">
+	<div class="container col-10 d-block justify-content-between bt-container-table">
 	<h2 class="text-center">
 		<cfoutput>
 			Bug change history

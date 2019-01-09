@@ -2,18 +2,19 @@ component output="false" {
 	this.name = 'bugtracker';
 	this.applicationTimeout = createtimespan(0, 2, 0, 0);
 	this.datasource = 'bug_tracker_test';	
-	this.customTagPaths = '\bugtracker\views\layout';
+	this.customTagPaths = 'D:\CFB2018\ColdFusion\cfusion\wwwroot\BugTracker\views\layout';
 	this.sessionManagement = true;
 	this.cookieManagement = true;
 	this.sessionTimeout = createTimespan(0, 2, 0, 0);
 
 	//	OnApplicationStart() method
-	boolean function onApplicationStart() output="false" {		
+	boolean function onApplicationStart() output="false" {				
 		application.authController = createObject("component",'bugtracker.controllers.authController');					
 		application.bugController = createObject("component",'bugtracker.controllers.bugController');
 		application.bugHistoryController = createObject("component",'bugtracker.controllers.bugHistoryController');
 		application.userController = createObject("component",'bugtracker.controllers.userController');
 		application.utils = createObject("component",'bugtracker.controllers.utils');
+		application.sugar = 'BLHL4WObGzd8+pVAPgw2kg==';
 		return true;
 	}
 	

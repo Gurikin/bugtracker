@@ -20,7 +20,7 @@ component output="false"
 		queryService.addParam(name="email_sql_param",value=arguments.email,cfsqltype="cf_sql_varchar");
 		queryService.addParam(name="fname_sql_param",value=arguments.fname,cfsqltype="cf_sql_varchar"); 
 		queryService.addParam(name="lname_sql_param",value=arguments.lname,cfsqltype="cf_sql_varchar");
-		queryService.addParam(name="password_sql_param",value=arguments.password,cfsqltype="cf_sql_varchar");
+		queryService.addParam(name="password_sql_param",value=encrypt(arguments.password, application.sugar, "AES", "Base64"),cfsqltype="cf_sql_varchar");
 		result = queryService.execute(sql="SELECT count(*) as cnt FROM user WHERE email = :email_sql_param");
 		if (result.getResult().cnt == 0) {
 			signUpResult = queryService.execute(sql="INSERT INTO user (email, fName, lname, password) values (:email_sql_param, :fname_sql_param, :lname_sql_param, :password_sql_param)");
@@ -39,7 +39,7 @@ component output="false"
 		queryService = new query();
 		queryService.setName("signInResult");
 		queryService.addParam(name="email_sql_param",value=arguments.email,cfsqltype="cf_sql_varchar");		
-		queryService.addParam(name="password_sql_param",value=arguments.password,cfsqltype="cf_sql_varchar");
+		queryService.addParam(name="password_sql_param",value=encrypt(arguments.password, application.sugar, "AES", "Base64"),cfsqltype="cf_sql_varchar");
 		result = queryService.execute(sql="SELECT email, fName, lname, password FROM user WHERE email = :email_sql_param and password = :password_sql_param");
 		signInResult = result.getResult();
 		if (signInResult.recordCount EQ 1) {
@@ -56,5 +56,6 @@ component output="false"
 	{
 		structdelete(session,'stLoggedInUser');
 		application.isUserLoggedIn = false;
+		cflogout();
 	}	
 }

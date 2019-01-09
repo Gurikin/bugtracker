@@ -1,0 +1,15 @@
+.bt-container-list {
+	min-width: 400px;
+}
+
+.bt-container-table {
+	min-width: 500px;
+}
+
+.bt-container-table-lg {
+	min-width: 750px;
+}
+
+.bt-container-nav {
+	min-width: 155px;
+}

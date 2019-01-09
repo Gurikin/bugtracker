@@ -15,6 +15,7 @@
 		
 		<!--- Custom styles for this template --->		
 		<link href="/BugTracker/assets/css/dashboard.css" rel="stylesheet">
+		<link href="/BugTracker/assets/css/bugtracker.css" rel="stylesheet">
 	</head>
 	<body>
 	<!---Include header here--->
@@ -38,8 +39,7 @@
     </div>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="/BugTracker/assets/js/bootstrap.bundle.min.js"></script>                
-    <script src="/BugTracker/assets/js/dashboard.js"></script>
+    <script src="/BugTracker/assets/js/bootstrap.bundle.min.js"></script>
     </body>	
 </cfif>
 </htlm>

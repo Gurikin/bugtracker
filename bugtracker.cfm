@@ -2,7 +2,7 @@
 	<cfset url.orderBy = (structKeyExists(url,"orderBy") ? url.orderBy : "find_date")>
 	<cfset url.sortOrder = (structKeyExists(url,"sortOrder") ? url.sortOrder : "ASC")>
 	<cfset bugList = application.bugController.getAllBugs("closed", url.orderBy, url.sortOrder)>	
-	<div class="container">
+	<div class="container bt-container-table-lg">
 		<table class="col-12 table table-hover table-dark border">
 			<thead class="text-center">
 				<th scope="col">
