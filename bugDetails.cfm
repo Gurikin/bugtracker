@@ -27,7 +27,7 @@
 				<a class="btn btn-sm btn-primary btn-block col-lg-5 col-md-6 col-sm-8 col-xs-7 mb-2" href="bugAdd.cfm?id=#bugDetails.bug_id#">
 					Update bug
 				</a>
-			</div>
+			</div>			
 			<ul class="list-group">
 				<li class="list-group-item">
 					#bugDetails.find_date#

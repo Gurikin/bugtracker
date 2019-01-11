@@ -1,10 +1,10 @@
 <cf_template pagename="Users list">
 	<!--- set default sort variables --->
-	<cfset url.orderBy = (structKeyExists(url,"orderBy") ? url.orderBy : "fname")>
-	<cfset url.sortOrder = (structKeyExists(url,"sortOrder") ? url.sortOrder : "ASC")>
+	<cfset url.orderBy = (structKeyExists(url, "orderBy") ? url.orderBy : "fname")>
+	<cfset url.sortOrder = (structKeyExists(url, "sortOrder") ? url.sortOrder : "ASC")>
 	<!--- get the query results with all users --->
 	<cfset userList = application.userController.getAllUsers("", url.orderBy, url.sortOrder)>
-	<!--- table with users info --->	
+	<!--- table with users info --->
 	<div class="container">
 		<table class="col-12 table table-hover table-dark border">
 			<thead class="text-center">
@@ -17,18 +17,25 @@
 					<a href="?orderBy=lname&sortOrder=<cfoutput>#((url.orderBy == 'lname' and url.sortOrder == 'ASC') ? 'DESC' : 'ASC')#</cfoutput>">
 						Last Name
 					</a>
-				</th>				
+				</th>
+				<th>
+					<a href="?orderBy=email&sortOrder=<cfoutput>#((url.orderBy == 'email' and url.sortOrder == 'ASC') ? 'DESC' : 'ASC')#</cfoutput>">
+						Email
+					</a>
+				</th>
 			</thead>
-			<tbody class="text-center">
+			<tbody class="text-center">				
 				<cfoutput query="userList">
-					<cfset user_id = userList.email>
-					<tr onclick="document.location = 'userDetails.cfm?email=#user_id#'">
+					<tr onclick="document.location = 'userDetails.cfm?email=#userList.email#'">
 						<td>
-							#userList.fname#
+							#userList.fName#
 						</td>
 						<td>
-							#userList.lname#
-						</td>						
+							#userList.lName#
+						</td>
+						<td>
+							#userList.email#
+						</td>
 					</tr>
 				</cfoutput>
 			</tbody>

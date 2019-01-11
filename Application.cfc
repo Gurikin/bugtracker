@@ -1,6 +1,7 @@
 component output="false" {	
 	this.name = 'bugtracker';
 	this.applicationTimeout = createtimespan(0, 2, 0, 0);
+	this.ormEnabled="true";
 	this.datasource = 'bug_tracker_test';	
 	this.customTagPaths = 'D:\CFB2018\ColdFusion\cfusion\wwwroot\BugTracker\views\layout';
 	this.sessionManagement = true;
@@ -23,8 +24,7 @@ component output="false" {
 		
 		if (isDefined('url.restartApp')) {
 			this.onApplicationStart();
-		}
-		
+		}		
 		
 		//redirect if logout
 		if (not isUserLoggedIn() and (not structKeyExists(session, 'stLoggedInUser'))) {
