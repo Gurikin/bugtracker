@@ -4,35 +4,24 @@ component  output="false"
 	public boolean function addBug(required struct form)
 	 output="true"
 	{
-		queryService = new query();		
-		transaction {
-			try {
-				//===============================================================================================================
-				//Insert Into the bug table======================================================================================
-				//===============================================================================================================
-				sqlString="INSERT INTO `bug_tracker_test`.`bug` (`find_date`, `short_desc`, `full_desc`, `status`, `urgency`, `criticality`, `usr_email`) VALUES (:find_date, :short_desc, :full_desc, :status, :urgency, :criticality, :usr_email)";
-				queryService.setsql(sqlString);
-				queryService.addParam(name = 'find_date', value=arguments.form.field_findDate);
-				queryService.addParam(name = 'short_desc', value=arguments.form.field_shortDesc);
-				queryService.addParam(name = 'full_desc', value=arguments.form.field_fullDesc);
-				queryService.addParam(name = 'status', value='new');
-				queryService.addParam(name = 'urgency', value=arguments.form.urgency);
-				queryService.addParam(name = 'criticality', value=arguments.form.criticality);			
-				queryService.addParam(name = 'usr_email', value=session.stLoggedInUser.userID);
-				insQuery = queryService.execute();
-				bug_id = insQuery.getPrefix().generatedkey;
-				//===============================================================================================================
-				//Insert Into bug_history table==================================================================================
-				//===============================================================================================================
-				application.bugHistoryController.addBug(bug_id);
-				return true;
-				transaction action="commit";
-				return true;
-			} catch (Exception e) {
-				writeDump(e);
-				transaction action="rollback";
-				return false;
-			}
+		try
+		{			
+			bugObj = EntityNew('bug');
+			bugObj.setFind_date(arguments.form.field_findDate);
+			bugObj.setShort_desc(arguments.form.field_shortDesc);
+			bugObj.setFull_desc(arguments.form.field_fullDesc);
+			bugObj.setStatus('new');
+			bugObj.setUrgency(arguments.form.urgency);			
+			bugObj.setCriticality(arguments.form.criticality);
+			bugObj.setUsr_email(session.stLoggedInUser.userID);
+			EntitySave(bugObj);
+			ormFlush();
+			return true;
+		}
+		catch(Exception e)
+		{
+			writeOutput(e);
+			return false;
 		}
 	}
 
@@ -40,88 +29,74 @@ component  output="false"
 	public boolean function updateBug(required struct form, bug_id)
 	 output="false"
 	{
-		queryService = new query();
-		transaction {
-			try {
-				sqlString="UPDATE `bug_tracker_test`.`bug` SET `short_desc`=:short_desc, `full_desc`=:full_desc, `urgency`=:urgency, `criticality`=:criticality WHERE `bug_id`=:bugId";
-				queryService.setsql(sqlString);
-				queryService.addParam(name = 'short_desc', value=arguments.form.field_shortDesc);
-				queryService.addParam(name = 'full_desc', value=arguments.form.field_fullDesc);			
-				queryService.addParam(name = 'urgency', value=arguments.form.urgency);
-				queryService.addParam(name = 'criticality', value=arguments.form.criticality);
-				queryService.addParam(name = 'bugId', value=arguments.bug_id);
-				queryService.execute().getResult();
-				transaction action="commit";  
-				return true;
-			} catch (Exception e) {
-				writeOutput(e);
-				transaction action="rollback";
-				return false;
-			}	
-		}			
+		try
+		{
+			bugObj = EntityLoadByPK('bug', arguments.bug_id);			
+			bugObj.setShort_desc(arguments.form.field_shortDesc);
+			bugObj.setFull_desc(arguments.form.field_fullDesc);			
+			bugObj.setUrgency(arguments.form.urgency);			
+			bugObj.setCriticality(arguments.form.criticality);			
+			return true;
+		}
+		catch(Exception e)
+		{
+			writeOutput(e);
+			return false;
+		}		
 	}
 	
 	// change the status of bug
 	public boolean function changeStatus(required numeric bug_id, required string newStatus) {
-		transaction {
-			try {
-				//===============================================================================================================
-				//Update the bug table===========================================================================================
-				//===============================================================================================================
-				sqlString="UPDATE `bug_tracker_test`.`bug` SET `status`=:status WHERE `bug_id`=:bugId";
-				queryService.setsql(sqlString);
-				queryService.addParam(name = 'status', value=LCase(arguments.newStatus));
-				queryService.addParam(name = 'bugId', value=arguments.bug_id);
-				queryService.execute().getResult();
-				transaction action="commit";
-				return true;  
-			} catch (Exception e) {
-				writeOutput(e);
-				transaction action="rollback";
-				return false;
-			}
+		try
+		{
+			bugObj = EntityLoadByPK('bug', arguments.bug_id);			
+			bugObj.setStatus(arguments.newStatus);
+			return true;
+		}
+		catch(Exception e)
+		{
+			writeOutput(e);
+			return false;
 		}
 	}	
 
 	// get list of all bugs with filter by status field
-	public query function getAllBugs(string filter='', string orderBy, string sortOrder)
+	public array function getAllBugs(string filter='', string orderBy, string sortOrder)
 	 output="false"
-	{		
-		queryService = new query();		
-		try {
-			sqlString="SELECT bug_id, find_date, short_desc, full_desc, status, urgency, criticality, usr_email FROM bug WHERE status <> :status ORDER BY `"&arguments.orderBy&"` "&arguments.sortOrder;
-			queryService.setsql(sqlString);
-			queryService.addParam(name = 'status', value=arguments.filter,cfsqltype="cf_sql_varchar");				
-			queryService.addParam(name = 'oBy', value=arguments.orderBy,cfsqltype="cf_sql_varchar"); //Can't catch bug: the queryService don't use this param
-			queryService.addParam(name = 'sOrder', value=arguments.sortOrder,cfsqltype="cf_sql_varchar"); //Can't catch bug: the queryService don't use this param
-			getAllBugsResult = queryService.execute().getResult();				  
-			return getAllBugsResult;
-		} catch (exception e) {
-			writeOutput (e);				
-			return null;
-		}		
+	{
+		ORMReload();    	
+    	bugs = ormExecuteQuery( "SELECT bug_id, find_date, short_desc, full_desc, status, urgency, criticality, usr_email FROM bug WHERE status <> :status ORDER BY "&arguments.orderBy&" "&arguments.sortOrder, { status: arguments.filter })
+		return bugs;
 	}
 	
 	// get one specific bug by bug_id field
 	public query function getBugByID(required numeric id)
 	 output="false"
 	 {
-		queryService = new query();
-		try {		
-			queryService.addParam(name="bug_id",value=arguments.id,cfsqltype="cf_sql_varchar");	
-			getBugQuery = queryService.execute(sql="SELECT bug_id, find_date, short_desc, full_desc, status, urgency, criticality, usr_email FROM bug WHERE bug_id = :bug_id");
-			getBugResult = getBugQuery.getResult();			  
-			return getBugResult;
-		} catch (Exception e) {
-			writeOutput (e);			  
-			return null;
-		}		
+		ORMReload();
+    	bug = EntityLoadByPK('bug',arguments.id);
+		getBugResult = EntityToQuery(bug);		
+		return getBugResult;
 	}
 	
 	// get all opened bugs for specific user
-	public query function getOpenedBugsByUserID(required string email, string orderBy = 'find_date', string sortOrder = 'DESC')
+	public any function getOpenedBugsByUserID(required string email, string orderBy = 'find_date', string sortOrder = 'DESC')
 	 output="false"
 	 {
+//	 	try {
+//	 		ORMReload();    	
+//    		openedBugs = ormExecuteQuery("SELECT bug.bug_id, bug.find_date, bug.short_desc, bug.full_desc,
+//													bug.status, bug.urgency, bug.criticality, bug.usr_email FROM bug_tracker_test.bug
+//													INNER JOIN user on bug.usr_email = user.email
+//													INNER JOIN bug_history on bug_history.bug_id = bug.bug_id
+//													WHERE user.email = :email AND bug.status = 'opened' GROUP BY bug.bug_id
+//													ORDER BY "&arguments.orderBy&" "&arguments.sortOrder, { email: arguments.email });
+//			return openedBugs;
+//	 	} catch (Exception ex) {
+//	 		writeOutput (ex);			  
+//			return false;
+//	 	}
+
 		queryService = new query();
 		try {		
 			queryService.addParam(name="email",value=arguments.email);	

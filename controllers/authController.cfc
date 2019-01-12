@@ -15,22 +15,15 @@ component output="false"
 	
 	// add user to the db 
 	public boolean function signUp(required string email, required string fname, required string lname, 
-	                             required string password) output="false"
+	                             required string password) output="true"
 	{
-		queryService = new query();
-		queryService.setName("signUpResult");
-		queryService.addParam(name="email_sql_param",value=arguments.email,cfsqltype="cf_sql_varchar");
-		queryService.addParam(name="fname_sql_param",value=arguments.fname,cfsqltype="cf_sql_varchar"); 
-		queryService.addParam(name="lname_sql_param",value=arguments.lname,cfsqltype="cf_sql_varchar");
-		queryService.addParam(name="password_sql_param",value=encrypt(arguments.password, application.sugar, "AES", "Base64"),cfsqltype="cf_sql_varchar");
-		result = queryService.execute(sql="SELECT count(*) as cnt FROM user WHERE email = :email_sql_param");
-		if (result.getResult().cnt == 0) {
-			signUpResult = queryService.execute(sql="INSERT INTO user (email, fName, lname, password) values (:email_sql_param, :fname_sql_param, :lname_sql_param, :password_sql_param)");
+		result = application.userController.getUserByID(arguments.email);		
+		if (result == false) {
+			application.userController.addUser(arguments.email,arguments.fname,arguments.lname,arguments.password);
 			return this.signIn (arguments.email, arguments.password);
 		} else {
-			aErrorMessages = ArrayNew(1);
-			arrayAppend(aErrorMessages,'Sorry, we already find user with this email. Please, try again.');
-			return aErrorMessages;
+			writeOutput('Sorry, we already find user with this email. Please, try again.');
+			return false;
 		}				
 	}
 	
