@@ -16,6 +16,7 @@ component  output="false"
 			bugObj.setUsr_email(session.stLoggedInUser.userID);
 			EntitySave(bugObj);
 			ormFlush();
+			application.bugHistoryController.addBug(bugObj.getBug_id());
 			return true;
 		}
 		catch(Exception e)
@@ -83,20 +84,6 @@ component  output="false"
 	public any function getOpenedBugsByUserID(required string email, string orderBy = 'find_date', string sortOrder = 'DESC')
 	 output="false"
 	 {
-//	 	try {
-//	 		ORMReload();    	
-//    		openedBugs = ormExecuteQuery("SELECT bug.bug_id, bug.find_date, bug.short_desc, bug.full_desc,
-//													bug.status, bug.urgency, bug.criticality, bug.usr_email FROM bug_tracker_test.bug
-//													INNER JOIN user on bug.usr_email = user.email
-//													INNER JOIN bug_history on bug_history.bug_id = bug.bug_id
-//													WHERE user.email = :email AND bug.status = 'opened' GROUP BY bug.bug_id
-//													ORDER BY "&arguments.orderBy&" "&arguments.sortOrder, { email: arguments.email });
-//			return openedBugs;
-//	 	} catch (Exception ex) {
-//	 		writeOutput (ex);			  
-//			return false;
-//	 	}
-
 		queryService = new query();
 		try {		
 			queryService.addParam(name="email",value=arguments.email);	

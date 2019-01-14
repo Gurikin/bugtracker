@@ -46,7 +46,7 @@ component output="false"
 		 	application.isUserLoggedIn = true;
 		 	location("bugtracker.cfm");			
 		}
-	}	
+	}
 	
 	// user sign out handle
 	public void function signOut() output="false"

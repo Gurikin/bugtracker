@@ -4,28 +4,22 @@ component  output="false"
 	public boolean function addBug(required numeric bug_id)
 	 output="true"
 	{
-		queryService = new query();		
-		transaction {
-			try {
-				//===============================================================================================================
-				//Insert Into bug_history table==================================================================================
-				//===============================================================================================================
-				sqlString="INSERT INTO `bug_tracker_test`.`bug_history` (`bug_id`, `action`, `action_date`, `action_comment`, `user_email`) VALUES (:bugId, :action, :changeStatusDate, :comment, :email)";
-				queryService.setsql(sqlString);
-				queryService.addParam(name = 'bugId', value=arguments.bug_id);
-				queryService.addParam(name = 'action', value='new');
-				queryService.addParam(name = 'changeStatusDate', value=DateTimeFormat(now(),"yyyy-mm-dd HH:nn:ss"));
-				queryService.addParam(name = 'comment', value='Add bug to bugtracker list');
-				queryService.addParam(name = 'email', value=session.stLoggedInUser.userID);
-				queryService.execute().getResult();
-				return true;
-				transaction action="commit";
-				return true;
-			} catch (Exception e) {
-				writeDump(e);
-				transaction action="rollback";
-				return false;
-			}
+		try
+		{			
+			bugHistoryObj = EntityNew('bug_history');
+			bugHistoryObj.setBug_id(arguments.bug_id);
+			bugHistoryObj.setAction('new');
+			bugHistoryObj.setAction_date(DateTimeFormat(now(),"yyyy-mm-dd HH:nn:ss"));
+			bugHistoryObj.setAction_comment('Add bug to bugtracker list');
+			bugHistoryObj.setUser_email(session.stLoggedInUser.userID);		
+			EntitySave(bugHistoryObj);
+			ormFlush();
+			return true;
+		}
+		catch(Exception e)
+		{
+			writeOutput(e);
+			return false;
 		}
 	}
 	
