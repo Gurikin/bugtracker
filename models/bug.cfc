@@ -6,5 +6,5 @@ component output="false" hint="Bug instanse" accessors="true" table="bug" persis
 	property name="status";
 	property name="urgency";
 	property name="criticality";
-	property name="usr_email";
+	property name="usr_email";	     
 }

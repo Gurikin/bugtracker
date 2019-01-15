@@ -40,33 +40,31 @@
 				</th>
 			</thead>
 			<tbody class="text-center">
-				<cfloop index="i" from="1" to="#arrayLen(bugList)#">
-					<cfset bug_id = bugList[i][1]>
-					<cfoutput>
-						<tr onclick="document.location = 'bugDetails.cfm?id=#bug_id#'">
-							<td>
-								#bugList[i][2]#
-							</td>
-							<td>
-								#bugList[i][3]#
-							</td>
-							<td class="#application.utils.getBugTrClass(bugList[i][5])#">
-								#bugList[i][5]#
-							</td>
-							<td class="#application.utils.getBugTrClass(bugList[i][6])#">
-								#bugList[i][6]#
-							</td>
-							<td class="#application.utils.getBugTrClass(bugList[i][7])#">
-								#bugList[i][7]#
-							</td>
-							<td>
-								<a href="userDetails.cfm?email=#bugList[i][8]#">
-									#bugList[i][8]#
-								</a>
-							</td>
-						</tr>
-					</cfoutput>
-				</cfloop>
+				<cfoutput query="bugList">
+					<cfset bug_id = bugList.bug_id>
+					<tr onclick="document.location = 'bugDetails.cfm?id=#bug_id#'">
+						<td>
+							#bugList.find_date#
+						</td>
+						<td>
+							#bugList.short_desc#
+						</td>
+						<td class="#application.utils.getBugTrClass(bugList.status)#">
+							#bugList.status#
+						</td>
+						<td class="#application.utils.getBugTrClass(bugList.urgency)#">
+							#bugList.urgency#
+						</td>
+						<td class="#application.utils.getBugTrClass(bugList.criticality)#">
+							#bugList.criticality#
+						</td>
+						<td>
+							<a href="userDetails.cfm?email=#bugList.usr_email#">
+								#bugList.usr_email#
+							</a>
+						</td>
+					</tr>
+				</cfoutput>
 			</tbody>
 		</table>
 	</div>

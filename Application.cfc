@@ -1,15 +1,15 @@
 component output="false" {	
 	this.name = 'bugtracker';
-	this.applicationTimeout = createtimespan(0, 2, 0, 0);
+	this.applicationTimeout = createtimespan(0, 0, 30, 0);
 	this.ormEnabled="true";
 	this.datasource = 'bug_tracker_test';	
 	this.customTagPaths = 'D:\CFB2018\ColdFusion\cfusion\wwwroot\BugTracker\views\layout';
 	this.sessionManagement = true;
 	this.cookieManagement = true;
-	this.sessionTimeout = createTimespan(0, 2, 0, 0);
+	this.sessionTimeout = createTimespan(0, 1, 0, 0);
 
 	//	OnApplicationStart() method
-	boolean function onApplicationStart() output="false" {				
+	boolean function onApplicationStart() output="false" {
 		application.authController = createObject("component",'bugtracker.controllers.authController');					
 		application.bugController = createObject("component",'bugtracker.controllers.bugController');
 		application.bugHistoryController = createObject("component",'bugtracker.controllers.bugHistoryController');
