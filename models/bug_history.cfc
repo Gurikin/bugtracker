@@ -4,5 +4,6 @@ component output="false" hint="Bug history instanse" accessors="true" table="bug
 	property name="action";
 	property name="action_date";
 	property name="action_comment";
-	property name="user_email";	
+	property name="user_email";
+//	property name="bug" fieldtype="many-to-one" fkcolumn="bug_id" insert="false" update="false" cfc="bug"
 }

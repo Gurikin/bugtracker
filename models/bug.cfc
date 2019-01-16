@@ -7,4 +7,5 @@ component output="false" hint="Bug instanse" accessors="true" table="bug" persis
 	property name="urgency";
 	property name="criticality";
 	property name="usr_email";
+	property name="history" fieldtype="one-to-many" fkcolumn="bug_id" cfc="bug_history" 
 }

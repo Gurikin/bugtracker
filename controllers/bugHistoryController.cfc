@@ -46,12 +46,12 @@ component  output="false"
 		}
 	}
 	
-	// get all history about one specific bug
-	public query function getBugHistory(required numeric bug_id) output='false'
-	{
-		ORMReload();
-		bugHistory = EntityLoad('bug_history', {bug_id=arguments.bug_id}, "action_date", {});
-		getBugHistoryResult = EntityToQuery(bugHistory);
-		return getBugHistoryResult;
-	}
+//	// get all history about one specific bug
+//	public query function getBugHistory(required numeric bug_id) output='false'
+//	{
+//		ORMReload();
+//		bugHistory = EntityLoad('bug_history', {bug_id=arguments.bug_id}, "action_date", {});
+//		getBugHistoryResult = EntityToQuery(bugHistory);
+//		return getBugHistoryResult;
+//	}
 }

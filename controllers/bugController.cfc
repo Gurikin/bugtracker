@@ -71,13 +71,17 @@ component  output="false"
 	}
 	
 	// get one specific bug by bug_id field
-	public query function getBugByID(required numeric id)
+	public any function getBugByID(required numeric id)
 	 output="false"
-	 {
-		ORMReload();
-    	bug = EntityLoadByPK('bug',arguments.id);
-		getBugResult = EntityToQuery(bug);		
-		return getBugResult;
+	 {	 	
+	 	ORMReload();
+    	bug = entityLoadByPK('bug',arguments.id);
+    	if (not IsNull(bug)) {
+    		return bug;
+    	} else {
+    		return JavaCast( "null", 0 );
+    	}
+				
 	}
 	
 	// get all opened bugs for specific user
